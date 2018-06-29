@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% if latest_content %}	
+
+<div class="content-col-left">
+<div class="content-box">
+{% for content in latest_content %}
+<div class="content-post {{ content.float_class }}">
+	<div class="content-post-top">
+		<a href="{{ content.urlstr }}"><img src="/static/" class="thumbnail" height="57" width="100"></a>
+		<h2><a href="{{ content.urlstr }}">{{ content.header }}</a></h2>
+		<p><em>{{ content.pub_date|date:"d F Y" }}</em></p>
+		<div class="content-box-fix"></div>
+		<p>{{ content.text|truncatewords:50 }}</p>
+	</div>
+	<div class="content-post-bottom">
+		<a href="{{ content.urlstr }}#comments">{{ content.comment_count }} Comments</a>
+	</div>
+</div>	
+{% if content.newline %}
+<div class="content-box-newline"></div>
+{% endif %}
+{% endfor %}
+	<div class="content-box-fix"></div>
+</div> <!-- /box -->
+</div> <!-- /left col -->
+<div class="content-box-fix"></div>
+{% else %}
+Inget inneh&aringll hittades!<br>
+{% endif %}
+
+{% endblock %}

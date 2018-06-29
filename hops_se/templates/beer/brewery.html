@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block content %}
+Namn: {{ brewery.name }}<br>
+Stad: {{ brewery.town }}</br>
+Land: {{ brewery.town.country }}<br>
+Beskrivning:<br>
+{{ brewery.description|linebreaksbr }}
+{% endblock %}

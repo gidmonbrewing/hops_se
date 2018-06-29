@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2 class="content-header">{{ news.header }}</h2>
+<p class="content-post-date">{{ news.pub_date|date:"d F Y, G:i" }}</p>
+<p>{{ news.text|linebreaksbr }}
+<hr/>
+<h4><a name="comments">Kommentarer:</a></h4>
+{% for comment in comments %}
+<p class="content-post-date">{{ comment.author }} {{ comment.pub_date|date:"Y-m-d H:i" }}</p>
+<p class="content-post-date">{{ comment.text|linebreaksbr }}</p>
+<hr/>
+{% endfor %}
+{% if user.is_authenticated %}
+<h4>Skriv ny kommentar:</h4>
+<form method="post" action="">
+	{% csrf_token %}
+	{{ comment_form.text }}<br/>
+	<input type="submit">
+</form>
+{% endif %}
+{% endblock %}

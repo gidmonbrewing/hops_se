@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2 class="content-header">Alla Recept</h2>
+{% for recipe in recipes %}
+<p class="content-post-date"><a href="/beer/recipe/{{ recipe.id }}">{{ recipe.beer.name }}</a></p>
+{% endfor %}
+{% if perms.beer.add_beerrecipe %}
+<hr/>
+<h4>Lägg till nytt recept:</h4>
+<form method="post" action="">
+	{% csrf_token %}
+	<input type="hidden" id="id_creator" name="creator" value="{{ user.id }}">
+	{{ recipe_form.beer.label_tag }}:{{ recipe_form.beer }}
+	{{ recipe_form.secret.label_tag }}:{{ recipe_form.secret }}
+	{{ recipe_form.group.label_tag }}:{{ recipe_form.group }}
+	<input type="submit">
+</form>
+<hr/>
+{% if perms.beer.add_beer %}
+<h4>Lägg till öl:</h4>
+<form method="post" action="/beer/add_beer/">
+	<input type="hidden" name="next" value="/beer/recipe/">
+	{% csrf_token %}
+	{{ beer_form }}
+	<input type="submit">
+</form>
+{% if perms.beer.add_brewery %}
+<hr/>
+<h4>Lägg till bryggeri:</h4>
+<form method="post" action="/beer/add_brewery/">
+	<input type="hidden" name="next" value="/beer/recipe/">
+		{% csrf_token %}
+		{{ brewery_form }}
+		<input type="submit">
+</form>
+{% if perms.beer.add_town %}
+<hr/>
+<h4>Lägg till stad:</h4>
+<form method="post" action="/beer/add_town/">
+	<input type="hidden" name="next" value="/beer/recipe/">
+		{% csrf_token %}
+		{{ town_form }}
+		<input type="submit">
+</form>
+{% endif %}
+{% endif %}
+{% endif %}
+{% endif %}
+{% endblock %}

@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="review-rating">{{ review.score }}</div>
+<h2 class="content-header">Recension av: <a href="/beer/{{ review.beer.id }}">{{ review.beer.name }}</a></h2>
+<p class="content-post-date">{{ review.pub_date|date:"d F Y, H:i" }}</p>
+<div class="content-box-fix"></div>
+<p>{{ review.text|linebreaksbr }}</p>
+<div class="content-box-fix"></div>
+{% endblock %}

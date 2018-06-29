@@ -1,0 +1,63 @@
+<html xmlns:fb="http://ogp.me/ns/fb#">
+
+<head>
+<title>Hops.se</title>
+<meta http-equiv="Content-Type" content="text/html"; charset=UTF-8" />
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<link rel="stylesheet" type="text/css" href="/static/stylesheet/hops_se.css" />
+</head>
+
+<body>
+<!-- Facebook API -->
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=277878525663872";
+    fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+<!-- End Facebook API -->
+    
+<div id="page">
+
+<div id="nav">
+
+<div id="nav-left">
+<a href="/">Hops.se</a>
+</div> <!--/nav-left-->
+
+<div id="nav-right">
+{% if user.is_authenticated %}
+Inloggad som: {{ user.first_name }} {{ user.last_name }}.<br>
+<a href="/accounts/logout/">Logga ut</a>
+{% else %}
+<a href="/accounts/login/">Logga in</a>
+{% endif %}
+</div> <!--/nav-right-->
+
+</div> <!--/nav-->
+
+<div id="content">
+	
+<div id="content-left">
+{% block content %}Inneh&aringll{% endblock %}
+</div> <!--content-left-->
+	
+<div id="content-right">
+{% for page_entry in facebook_page %}
+<div class="content-col-right">
+<p><i>{{ page_entry.pub_date|date:"d F Y" }}</i></p>
+<p>{{ page_entry.message|linebreaksbr }}</p>
+</div>
+{% endfor %}
+</div> <!--content-right-->
+
+<div class="content-box-fix"></div>
+	
+</div> <!--content-->
+
+</div> <!--/page-->
+<body>
+
+</html>

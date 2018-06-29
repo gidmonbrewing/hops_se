@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% if beer_list %}
+	<ul>
+	{% for beer in beer_list %}
+		<li><a href="/beer/{{ beer.id }}/">{{ beer.name }}</a></li>
+	{% endfor %}
+	</ul>
+{% else %}
+	<p>No beers in database.</p>
+{% endif %}
+{% endblock %}

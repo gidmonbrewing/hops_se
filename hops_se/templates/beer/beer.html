@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="beer-img"><img src="{{ beer.picture }}" height="150" width="150"></div>
+<h2 class="content-header">{{ beer.name }}</h2>
+<p class="content-post-date"><a href="/beer/brewery/{{ beer.id }}">{{ beer.brewery.name }}</a></p>
+<p class="content-post-date">{{ beer.type }}, {{ beer.abv }}% </p>
+<p class="content-post-date"><a href="http://systembolaget.se/{{ beer.sb_id }}" target="_blank">Systembolagets sida</a></p>
+<div class="content-box-fix"></div>
+<p>{{ beer.description|linebreaksbr }}</p>
+<div class="content-box-fix"></div>
+{% endblock %}

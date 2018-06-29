@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div style="overflow:auto;">
+<div class="beer-img"><img src="{{ recipe.beer.picture }}" height="150" width="150"></div>
+<div class="content-post" style="float:left;">
+	<h2 class="content-header">Recept: {{ recipe.beer.name }}</h2>
+	<p class="content-post-data" contentEditable="true">Lite text om ölet</p>
+</div>
+</div>
+<div class="content-box-newline"></div>
+<div>
+<hr/>
+<h4>Vatten:</h4>
+<p class="content-post-date">Start vattenvolym: <label id="startWaterVolume" contentEditable="true">{{ recipe.start_water_volume|floatformat:2 }}</label> liter </p>
+<p class="content-post-date">Maxvolym: {{ max_volume|floatformat:2 }} liter</p>
+<p class="content-post-date">Kokvolym: {{ boil_volume|floatformat:2 }} liter</p>
+<p class="content-post-date">Beräknad slutvolym: {{ final_volume_estimate|floatformat:2 }} liter</p>
+<p class="content-post-date">Slutvolym: {{ recipe.final_volume|floatformat:2 }} liter</p>
+<hr/>
+<h4>Mäskning:</h4>
+<p class="content-post-date">Inmäskning: {{ recipe.mash_in_temp }} &deg;C</p>
+<p class="content-post-date">Mäskning: {{ recipe.mashing_temp }} &deg;C, {{ recipe.mashing_time }} min</p>
+<p class="content-post-date">Utmäskning: {{ recipe.mash_out_temp }} &deg;C, {{ recipe.mash_out_time }} min</p>
+<p class="content-post-date">{{ form.conversion_efficiency.label }}: {{ recipe.conversion_efficiency }}%</p>
+{% for entry in malt_entries %}
+<p class="content-post-date">{{ entry.malt_data.amount }} kg {{ entry.malt_data.malt.name }}. {{ entry.malt_data.malt.ebc }} EBC. {{ entry.extract_potential }}% EP</p>
+{% endfor %}
+<p class="content-post-date">Vatten/Malt ratio: {{ water_malt_ratio|floatformat:3 }} liter/kg</p>
+<p class="content-post-date">Viktad extraktionspotential: {{ extract_potential|floatformat:3 }}%</p>
+<p class="content-post-date">EBC: {{ ebc|floatformat:2 }} </p>
+<hr/>
+<h4>Estimat innan mätningar:</h4>
+<p class="content-post-date">SG innan kok (max): {{ potential_sg|floatformat:3 }}</p>
+<p class="content-post-date">SG innan kok: {{ pre_boil_sg_adjusted|floatformat:3 }}</p>
+<p class="content-post-date">OG (max): {{ og_potential|floatformat:3 }} </p>
+<p class="content-post-date">OG: {{ og_adjusted|floatformat:3 }} </p>
+<p class="content-post-date">FG: {{ fg_estimated2|floatformat:3 }} </p>
+<p class="content-post-date">ABV: {{ abv_estimated2|floatformat:2 }} </p>
+<hr/>
+<h4>Uppmätt SG och beräkningar:</h4>
+{% if recipe.pre_boil_sg > 0 %}
+<p class="content-post-date">SG innan kok: {{ recipe.pre_boil_sg|floatformat:3 }}</p>
+{% else %}
+<p class="content-post-date">SG innan kok (från OG): {{ sg_from_og|floatformat:3 }}</p>
+{% endif %}
+<p class="content-post-date">Beräknad konverteringseffektivitet: {{ computed_brewhouse_eff|floatformat:2 }}%</p>
+<hr/>
+<h4>Kokning:</h4>
+{% for entry in hops_entries %}
+{% if entry.is_hops %}
+<p class="content-post-date">{{ entry.recipe_entry.amount }} g {{ entry.recipe_entry.hops.name }} ({{ entry.recipe_entry.hops.alpha }}%). {{ entry.recipe_entry.add_time }} min. {{ entry.ibu|floatformat:2 }} IBU</p>
+{% else %}
+<p class="content-post-date">{{ entry.recipe_entry.amount }} g {{ entry.recipe_entry.ingredient.name }}. {{ entry.recipe_entry.add_time }} min</p>
+{% endif %}
+{% endfor %}
+<hr/>
+<h4>Uppmätt OG och beräkningar:</h4>
+{% if recipe.og > 0 %}
+<p class="content-post-date">OG: {{ recipe.og|floatformat:3 }} </p>
+{% else %}
+<p class="content-post-date">OG (från SG): {{ og_from_sg|floatformat:3 }} </p>
+{% endif %}
+<p class="content-post-date">Beräknad brygghuseffektivitet: {{ computed_brewhouse_eff|floatformat:2 }}% </p>
+<p class="content-post-date">IBU Tinseth: {{ ibu_tinseth|floatformat:2 }} </p>
+<p class="content-post-date">IBU Rager: {{ ibu_rager|floatformat:2 }} </p>
+<p class="content-post-date">FG: {{ fg_estimated|floatformat:3 }} </p>
+<p class="content-post-date">ABV: {{ abv_estimated|floatformat:2 }} </p>
+<hr/>
+<h4>Primärjäsning:</h4>
+{% for stage in fermentation_stages %}
+<p class="content-post-date">Jäst: {{ stage.yeast_amount }}g {{ stage.yeast.name }}</p>
+<p class="content-post-date">Antal jästceller: {{ stage.yeast.cell_concentration }} miljarder/g</p>
+<p class="content-post-date">Temperatur: {{ stage.temp }} &deg;C</p>
+<p class="content-post-date">Jästid: {{ stage.time }} dagar</p>
+<p class="content-post-date">Utjäsningsgrad: {{ stage.yeast.attenuation }}%</p>
+<p class="content-post-date">Vald pitchgrad: {{ stage.target_pitch_rate }}</p>
+{% endfor %}
+<p class="content-post-date">Jästceller behov: {{ yeast_cells_needed|floatformat:2 }} miljarder</p>
+<p class="content-post-date">Torrjäst behov: {{ dry_yeast_needed|floatformat:2 }} gram</p>
+<p class="content-post-date">Beräknad pitchgrad: {{ computed_pitch_rate|floatformat:2 }}</p>
+<hr/>
+<h4>Uppmätt FG och beräkningar:</h4>
+<p class="content-post-date">FG: {{ recipe.fg|floatformat:3 }} </p>
+<p class="content-post-date">ABV Approx: {{ abv_approx|floatformat:2 }} </p>
+<p class="content-post-date">ABV Exact: {{ abv|floatformat:2 }} </p>
+<p class="content-post-date">Beräknad jästeffektivitet: {{ apparent_attenuation|floatformat:2 }}%</p>
+<hr/>
+<h4>Kolsyresättning:</h4>
+{% for entry in priming_entries %}
+<p class="content-post-date">Sockertyp: Bordssocker</p>
+<p class="content-post-date">Kolsyrekoncentration: {{ entry.carbon_dioxide_concentration }}</p>
+<p class="content-post-date">Mängd: {{ priming_sugar }} g</p>
+{% endfor %}
+<hr/>
+<form method="post" action="">
+	{% csrf_token %}
+	{{form}}
+<input type="submit">
+</form>
+<hr/>
+<h4><a name="comments">Kommentarer:</a></h4>
+{% for comment in comments %}
+<p class="content-post-date"><b>{{ comment.author }}</b> {{ comment.pub_date|date:"Y-m-d H:i" }}</p>
+<p class="content-post-date">{{ comment.text|linebreaksbr }}</p>
+<hr/>
+{% endfor %}
+{% if user.is_authenticated %}
+<h4>Skriv ny kommentar:</h4>
+<form method="post" action="/beer/recipe/add_comment/{{ recipe.id }}/">
+	{% csrf_token %}
+	{{ comment_form.text }}<br/>
+	<input type="submit">
+</form>
+{% endif %}
+
+</div>
+<script>
+	$("#startWaterVolume").keypress(function(e) {
+									return e.which != 13;
+									});
+	$("#startWaterVolume").bind("input", function() {
+								
+								$(this).css("font-weight","bold");
+								$.post('',
+									{
+									   {{form.start_water_volume.name}}:$("#startWaterVolume").html(),
+									   csrfmiddlewaretoken:'{{csrf_token}}'
+									}, function(data) {
+											alert(data);
+									   }
+									   );
+								});
+								
+</script>
+{% endblock %}
